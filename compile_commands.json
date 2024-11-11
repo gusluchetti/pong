@@ -1,0 +1,12 @@
+[
+{
+  "directory": "/mnt/c/Users/gustavolrl/Github/pong/out/build/Linux-Debug",
+  "command": "/usr/bin/cc  -I/mnt/c/Users/gustavolrl/Github/pong/external/glad/include  -o CMakeFiles/glad.dir/external/glad/src/glad.c.o -c /mnt/c/Users/gustavolrl/Github/pong/external/glad/src/glad.c",
+  "file": "/mnt/c/Users/gustavolrl/Github/pong/external/glad/src/glad.c"
+},
+{
+  "directory": "/mnt/c/Users/gustavolrl/Github/pong/out/build/Linux-Debug",
+  "command": "/usr/bin/c++  -I/mnt/c/Users/gustavolrl/Github/pong/external/glad/include -isystem /usr/include/SDL2  -o CMakeFiles/pong.dir/main.cpp.o -c /mnt/c/Users/gustavolrl/Github/pong/main.cpp",
+  "file": "/mnt/c/Users/gustavolrl/Github/pong/main.cpp"
+}
+]
