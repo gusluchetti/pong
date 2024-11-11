@@ -24,9 +24,8 @@ set(SOURCE_FILE main.cpp)
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS} -O3")
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS} -g -O0")
 
-add_library("glad" "external/glad/src/glad.c")
-target_include_directories("glad" PRIVATE "external/glad/include")
+add_library(glad STATIC "external/glad/src/glad.c")
+include_directories("external/glad/include")
 
 add_executable(pong ${SOURCE_FILE})
-target_include_directories(pong PRIVATE "external/glad/include")
-target_link_libraries(pong SDL2::SDL2main SDL2::SDL2-static OpenGL::GL "glad")
+target_link_libraries(pong SDL2::SDL2main SDL2::SDL2-static OpenGL::GL glad)

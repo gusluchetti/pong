@@ -1,38 +1,47 @@
-#include <GL/gl.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_error.h>
-
+#include <SDL2/SDL_video.h>
 #include <cstdio>
+#include <glad/glad.h>
+#include <iostream>
 
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 450;
 
-SDL_Window *gWindow = NULL;
-SDL_Surface *gScreenSurface = NULL;
-SDL_Surface *gHelloWorld = NULL;
+SDL_Window *gWindow = nullptr;
+SDL_Surface *gScreenSurface = nullptr;
+SDL_GLContext gContext = NULL;
 
-int main(int, char **) {
-  // Initialize SDL
+void getOpenGLInfo() {
+  std::cout << "Vendor: " << glGetString(GL_VENDOR) << std::endl;
+  std::cout << "Renderer: " << glGetString(GL_RENDERER) << std::endl;
+  std::cout << "Version: " << glGetString(GL_VERSION) << std::endl;
+  std::cout << "Shading Language: " << glGetString(GL_SHADING_LANGUAGE_VERSION)
+            << std::endl;
+};
+
+void init() {
   SDL_Init(SDL_INIT_VIDEO);
 
-  // Create a window and an OpenGL context
-  SDL_Window *window =
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+  SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+  SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 24);
+
+  getOpenGLInfo();
+
+  gWindow =
       SDL_CreateWindow("pong", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
                        SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_OPENGL);
-  SDL_GLContext context = SDL_GL_CreateContext(window);
+  gContext = SDL_GL_CreateContext(gWindow);
+};
 
-  // Set up the OpenGL viewport
-  glViewport(0, 0, 800, 600);
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  glOrtho(-1.0, 1.0, -1.0, 1.0, 0.0, 1.0);
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
-
-  // Game loop
+void loop() {
   bool running = true;
   while (running) {
-    // Handle events
+
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
       if (event.type == SDL_QUIT) {
@@ -40,26 +49,22 @@ int main(int, char **) {
       }
     }
 
-    // Clear the screen
     glClear(GL_COLOR_BUFFER_BIT);
 
-    // Draw a white square
-    glColor3f(1.0, 1.0, 1.0);
-    glBegin(GL_QUADS);
-    glVertex2f(-0.1, -0.1);
-    glVertex2f(-0.1, 0.1);
-    glVertex2f(0.1, 0.1);
-    glVertex2f(0.1, -0.1);
-    glEnd();
-
-    // Update the display
-    SDL_GL_SwapWindow(window);
+    SDL_GL_SwapWindow(gWindow);
   }
+};
 
-  // Clean up
-  SDL_GL_DeleteContext(context);
-  SDL_DestroyWindow(window);
+void cleanup() {
+  SDL_GL_DeleteContext(gContext);
+  SDL_DestroyWindow(gWindow);
   SDL_Quit();
+};
+
+int main(int, char **) {
+  init();
+  loop();
+  cleanup();
 
   return 0;
 }
