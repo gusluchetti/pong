@@ -145,7 +145,8 @@ bool GL_Init() {
   glBindVertexArray(gVAO);
 
   // Create VBO data
-  GLfloat fVertexData[] = {-0.5f, -0.5f, 0.5f, -0.5f, 0.0f, 0.5f};
+  // GLfloat fVertexData[] = {-0.5f, -0.5f, 0.5f, -0.5f, 0.0f, 0.5f};
+  GLfloat fVertexData[] = {0.0f, -0.5f, 0.5f, 0.5f, -0.5f, 0.5f};
 
   // Create Vertex Buffer Object
   glGenBuffers(1, &gVBO);
