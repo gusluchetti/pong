@@ -1,12 +1,10 @@
+#include <GL/glew.h>
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_error.h>
-#include <SDL2/SDL_video.h>
-#include <cstdio>
-#include <glad/glad.h>
 #include <iostream>
 
-const int SCREEN_WIDTH = 800;
-const int SCREEN_HEIGHT = 450;
+int gScreenWidth = 1280;
+int gScreenHeight = 1024;
+bool gIsFullscreen = false;
 
 SDL_Window *gWindow = nullptr;
 SDL_Surface *gScreenSurface = nullptr;
@@ -21,36 +19,58 @@ void getOpenGLInfo() {
 };
 
 void init() {
-  SDL_Init(SDL_INIT_VIDEO);
+  if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+    SDL_LogCritical(SDL_LOG_CATEGORY_APPLICATION,
+                    "Failed to initialize SDL: %s\n", SDL_GetError());
+    exit(1);
+  }
 
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
-  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
-
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+
   SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
   SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 24);
 
-  getOpenGLInfo();
-
   gWindow =
-      SDL_CreateWindow("pong", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-                       SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_OPENGL);
+      SDL_CreateWindow("pong", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+                       gScreenWidth, gScreenHeight,
+                       SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL |
+                           (gIsFullscreen * SDL_WINDOW_FULLSCREEN));
+  if (gWindow == NULL) {
+    SDL_LogCritical(SDL_LOG_CATEGORY_APPLICATION,
+                    "Failed to create OpenGL window: %s\n", SDL_GetError());
+    exit(1);
+  }
+
   gContext = SDL_GL_CreateContext(gWindow);
+  if (gContext == NULL) {
+    SDL_LogCritical(SDL_LOG_CATEGORY_APPLICATION,
+                    "Failed to create OpenGL context: %s\n", SDL_GetError());
+    exit(1);
+  }
+
+  getOpenGLInfo();
 };
 
 void loop() {
-  bool running = true;
-  while (running) {
+  SDL_Event Event;
+  bool bQuit = false;
 
-    SDL_Event event;
-    while (SDL_PollEvent(&event)) {
-      if (event.type == SDL_QUIT) {
-        running = false;
+  while (!bQuit) {
+    while (SDL_PollEvent(&Event)) {
+      if (Event.type == SDL_QUIT)
+        bQuit = true;
+      else if (Event.type == SDL_KEYDOWN) {
+        if (Event.key.keysym.sym == SDLK_ESCAPE)
+          bQuit = true;
       }
     }
 
-    glClear(GL_COLOR_BUFFER_BIT);
+    // Render the scene
+    // GL_Render();
 
+    // Swap the back-buffer and present it
     SDL_GL_SwapWindow(gWindow);
   }
 };
