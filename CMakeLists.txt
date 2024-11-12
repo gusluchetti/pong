@@ -4,7 +4,7 @@ project(pong)
 set(CMAKE_C_STANDARD 17)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-set(SOURCE_FILE main.cpp)
+set(SOURCE_FILE "src/main.cpp")
 
 include(FetchContent)
 Set(FETCHCONTENT_QUIET FALSE)
