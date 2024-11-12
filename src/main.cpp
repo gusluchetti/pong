@@ -4,8 +4,8 @@
 #include <SDL2/SDL.h>
 #include <iostream>
 
-int gScreenWidth = 1280;
-int gScreenHeight = 1024;
+int gScreenWidth = 800;
+int gScreenHeight = 450;
 bool gIsFullscreen = false;
 
 SDL_Window *gWindow = nullptr;
@@ -57,6 +57,14 @@ void init() {
 #ifdef _DEBUG
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
 #endif
+
+  if (gIsFullscreen) {
+    // Get desktop resolution
+    SDL_DisplayMode CurrentDisplay;
+    SDL_GetCurrentDisplayMode(0, &CurrentDisplay);
+    gScreenWidth = CurrentDisplay.w;
+    gScreenHeight = CurrentDisplay.h;
+  }
 
   gWindow =
       SDL_CreateWindow("pong", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
