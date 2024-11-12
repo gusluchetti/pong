@@ -34,7 +34,24 @@ if (NOT GLEW_FOUND)
 endif()
 
 add_executable(pong ${SOURCE_FILE})
-target_link_libraries(pong PRIVATE SDL2 GLEW GLU GL)
-target_include_directories(pong PRIVATE 
-    ${CMAKE_SOURCE_DIR}/include
-)
+
+if(WIN32)
+    target_link_libraries(pong PRIVATE 
+        SDL2::SDL2-static 
+        SDL2::SDL2main
+        libglew_static
+        opengl32
+    )
+    
+    # Force static linking for Windows
+    set_target_properties(pong PROPERTIES
+        LINK_FLAGS "-static -static-libgcc -static-libstdc++"
+    )
+else()
+    target_link_libraries(pong PRIVATE 
+        SDL2 
+        GLEW 
+        GLU 
+        GL
+    )
+endif()
