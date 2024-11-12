@@ -116,10 +116,11 @@ bool GL_Init() {
   glDisable(GL_STENCIL_TEST);
 
   // Create vertex shader source
-  const GLchar p_cVertexShaderSource[] = {"#version 430 core\n \
-    layout(location = 0) in vec2 v2VertexPos2D;\n \
-    void main() \n \
-    { gl_Position = vec4(v2VertexPos2D, 0.0f, 1.0f); }"};
+  // const GLchar p_cVertexShaderSource[] = {"#version 430 core\n \
+  //   layout(location = 0) in vec2 v2VertexPos2D;\n \
+  //   void main() \n \
+  //   { gl_Position = vec4(v2VertexPos2D, 0.0f, 1.0f); }"};
+  const GLchar *p_cVertexShaderSource = GL_LoadShaderfile("../vertex.glsl");
 
   // Create vertex shader
   GLuint uiVertexShader;
@@ -127,12 +128,13 @@ bool GL_Init() {
     return false;
 
   // Create fragment shader source
-  const GLchar p_cFragmentShaderSource[] = {"#version 430 core\n \
-    out vec3 v3FragOutput;\n \
-    void main() \n \
-    {\n \
-        v3FragOutput = vec3(1.0f, 1.0f, 0.0f);\n \
-    }"};
+  // const GLchar p_cFragmentShaderSource[] = {"#version 430 core\n \
+  //   out vec3 v3FragOutput;\n \
+  //   void main() \n \
+  //   {\n \
+  //       v3FragOutput = vec3(1.0f, 1.0f, 0.0f);\n \
+  //   }"};
+  const GLchar *p_cFragmentShaderSource = GL_LoadShaderfile("../fragment.glsl");
 
   // Create fragment shader
   GLuint uiFragmentShader;

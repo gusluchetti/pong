@@ -1,5 +1,24 @@
 #include <GL/glew.h>
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_rwops.h>
+
+GLchar *GL_LoadShaderfile(const char *p_cFileName) {
+  // Load directly from the specified file
+  SDL_RWops *p_File = SDL_RWFromFile(p_cFileName, "r");
+  if (p_File == NULL) {
+    SDL_LogCritical(SDL_LOG_CATEGORY_APPLICATION,
+                    "Failed to open shader file: %s\n", p_cFileName);
+    exit(1);
+  }
+
+  // Allocate a string to store contents
+  size_t lFileSize = (size_t)SDL_RWsize(p_File);
+  GLchar *p_cFileContents = (GLchar *)malloc(lFileSize + 1);
+  SDL_RWread(p_File, p_cFileContents, lFileSize, 1);
+  p_cFileContents[lFileSize] = '\0'; // Add terminating character
+
+  return p_cFileContents;
+}
 
 bool GL_LoadShader(GLuint &uiShader, GLenum ShaderType,
                    const GLchar *p_cShader) {
