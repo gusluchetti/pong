@@ -101,7 +101,7 @@ bool GL_Init() {
 #endif
 
   // Set up initial GL attributes
-  glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+  glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
   glCullFace(GL_BACK);
   glEnable(GL_CULL_FACE);
   glEnable(GL_DEPTH_TEST);
@@ -123,7 +123,7 @@ bool GL_Init() {
     out vec3 v3FragOutput;\n \
     void main() \n \
     {\n \
-        v3FragOutput = vec3(1.0f, 1.0f, 1.0f);\n \
+        v3FragOutput = vec3(1.0f, 1.0f, 0.0f);\n \
     }"};
 
   // Create fragment shader
