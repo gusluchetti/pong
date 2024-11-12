@@ -1,3 +1,5 @@
+#include "debug.cpp"
+#include "shader.cpp"
 #include <GL/glew.h>
 #include <SDL2/SDL.h>
 #include <iostream>
@@ -13,92 +15,6 @@ SDL_GLContext gContext = NULL;
 GLuint gVAO;
 GLuint gVBO;
 GLuint gMainProgram;
-
-static char *gp_cSeverity[] = {"High", "Medium", "Low", "Notification"};
-static char *gp_cType[] = {"Error",       "Deprecated",  "Undefined",
-                           "Portability", "Performance", "Other"};
-static char *gp_cSource[] = {"OpenGL",    "OS",          "GLSL Compiler",
-                             "3rd Party", "Application", "Other"};
-
-void DebugCallback(GLenum uiSource, GLenum uiType, GLuint uiID,
-                   GLenum uiSeverity, GLsizei iLength, const GLchar *p_cMessage,
-                   const void *p_UserParam) {
-  // Get the severity
-  uint32_t uiSevID = 3;
-  switch (uiSeverity) {
-  case GL_DEBUG_SEVERITY_HIGH:
-    uiSevID = 0;
-    break;
-  case GL_DEBUG_SEVERITY_MEDIUM:
-    uiSevID = 1;
-    break;
-  case GL_DEBUG_SEVERITY_LOW:
-    uiSevID = 2;
-    break;
-  case GL_DEBUG_SEVERITY_NOTIFICATION:
-  default:
-    uiSevID = 3;
-    break;
-  }
-  // Get the type
-  uint32_t uiTypeID = 5;
-  switch (uiType) {
-  case GL_DEBUG_TYPE_ERROR:
-    uiTypeID = 0;
-    break;
-  case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
-    uiTypeID = 1;
-    break;
-  case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
-    uiTypeID = 2;
-    break;
-  case GL_DEBUG_TYPE_PORTABILITY:
-    uiTypeID = 3;
-    break;
-  case GL_DEBUG_TYPE_PERFORMANCE:
-    uiTypeID = 4;
-    break;
-  case GL_DEBUG_TYPE_OTHER:
-  default:
-    uiTypeID = 5;
-    break;
-  }
-  // Get the source
-  uint32_t uiSourceID = 5;
-  switch (uiSource) {
-  case GL_DEBUG_SOURCE_API:
-    uiSourceID = 0;
-    break;
-  case GL_DEBUG_SOURCE_WINDOW_SYSTEM:
-    uiSourceID = 1;
-    break;
-  case GL_DEBUG_SOURCE_SHADER_COMPILER:
-    uiSourceID = 2;
-    break;
-  case GL_DEBUG_SOURCE_THIRD_PARTY:
-    uiSourceID = 3;
-    break;
-  case GL_DEBUG_SOURCE_APPLICATION:
-    uiSourceID = 4;
-    break;
-  case GL_DEBUG_SOURCE_OTHER:
-  default:
-    uiSourceID = 5;
-    break;
-  }
-
-  // Output to the Log
-  SDL_LogCritical(SDL_LOG_CATEGORY_APPLICATION,
-                  "OpenGL Debug: Severity=%s, Type=%s, Source=%s - %s",
-                  gp_cSeverity[uiSevID], gp_cType[uiTypeID],
-                  gp_cSource[uiSourceID], p_cMessage);
-  if (uiSeverity == GL_DEBUG_SEVERITY_HIGH) {
-    // This a serious error so we need to shutdown the program
-    SDL_Event event;
-    event.type = SDL_QUIT;
-    SDL_PushEvent(&event);
-  }
-};
 
 void GLDebug_Init() {
   // Allow for synchronous callbacks.
@@ -167,51 +83,6 @@ void cleanup() {
   SDL_GL_DeleteContext(gContext);
   SDL_DestroyWindow(gWindow);
   SDL_Quit();
-};
-
-bool GL_LoadShader(GLuint &uiShader, GLenum ShaderType,
-                   const GLchar *p_cShader) {
-  // Build and link the shader program
-  uiShader = glCreateShader(ShaderType);
-  glShaderSource(uiShader, 1, &p_cShader, NULL);
-  glCompileShader(uiShader);
-
-  // Check for errors
-  GLint iTestReturn;
-  glGetShaderiv(uiShader, GL_COMPILE_STATUS, &iTestReturn);
-  if (iTestReturn == GL_FALSE) {
-    GLchar p_cInfoLog[1024];
-    int32_t iErrorLength;
-    glGetShaderInfoLog(uiShader, 1024, &iErrorLength, p_cInfoLog);
-    SDL_LogCritical(SDL_LOG_CATEGORY_APPLICATION,
-                    "Failed to compile shader: %s\n", p_cInfoLog);
-    glDeleteShader(uiShader);
-    return false;
-  }
-  return true;
-};
-
-bool GL_LoadShaders(GLuint &uiShader, GLuint uiVertexShader,
-                    GLuint uiFragmentShader) {
-  // Link the shaders
-  uiShader = glCreateProgram();
-  glAttachShader(uiShader, uiVertexShader);
-  glAttachShader(uiShader, uiFragmentShader);
-  glLinkProgram(uiShader);
-
-  // Check for error in link
-  GLint iTestReturn;
-  glGetProgramiv(uiShader, GL_LINK_STATUS, &iTestReturn);
-  if (iTestReturn == GL_FALSE) {
-    GLchar p_cInfoLog[1024];
-    int32_t iErrorLength;
-    glGetShaderInfoLog(uiShader, 1024, &iErrorLength, p_cInfoLog);
-    SDL_LogCritical(SDL_LOG_CATEGORY_APPLICATION,
-                    "Failed to link shaders: %s\n", p_cInfoLog);
-    glDeleteProgram(uiShader);
-    return false;
-  }
-  return true;
 };
 
 bool GL_Init() {
