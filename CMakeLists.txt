@@ -35,12 +35,24 @@ endif()
 
 add_executable(pong ${SOURCE_FILE})
 
+# GLM
+find_package(GLM QUIET)
+if (NOT GLM_FOUND)
+        FetchContent_Declare(
+                GLM
+                GIT_REPOSITORY https://github.com/g-truc/glm.git
+                GIT_TAG 1.0.1
+        )
+        FetchContent_MakeAvailable(GLM)
+endif()
+
 if(WIN32)
     target_link_libraries(pong PRIVATE 
         SDL2::SDL2-static 
         SDL2::SDL2main
         libglew_static
         opengl32
+        glm
     )
     
     # Force static linking for Windows
@@ -53,5 +65,6 @@ else()
         GLEW 
         GLU 
         GL
+        glm
     )
 endif()
