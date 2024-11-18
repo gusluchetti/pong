@@ -134,7 +134,8 @@ bool GL_Init() {
   //   {\n \
   //       v3FragOutput = vec3(1.0f, 1.0f, 0.0f);\n \
   //   }"};
-  const GLchar *p_cFragmentShaderSource = GL_LoadShaderfile("../fragment.glsl");
+  const GLchar *p_cFragmentShaderSource =
+      GL_LoadShaderfile("../fragment.glsl");
 
   // Create fragment shader
   GLuint uiFragmentShader;
