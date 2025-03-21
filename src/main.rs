@@ -19,7 +19,13 @@ struct Player {
     hit_bot: bool,
 }
 
+enum Screen {
+    Menu,
+    Game,
+}
+
 struct Game {
+    curr_screen: Screen,
     ball: Ball,
     players: [Player; 2],
     scoreboard: String,
@@ -35,6 +41,7 @@ impl Game {
         let move_speed = window_height * 0.005;
 
         Game {
+            curr_screen: Screen::Menu,
             ball: Ball {
                 pos: Vector2 {
                     x: window_width / 2.0,
@@ -146,6 +153,10 @@ impl Game {
         draw_handle.draw_rectangle_rec(self.players[0].rec, Color::RED);
         draw_handle.draw_rectangle_rec(self.players[1].rec, Color::BLUE);
     }
+
+    fn show_menu(&mut self, draw_handle: &mut RaylibDrawHandle) {
+        draw_handle.draw_text("MENU", 10, 10, 20, Color::WHITE);
+    }
 }
 
 fn main() {
@@ -161,8 +172,15 @@ fn main() {
     let mut game = Game::new();
     while !rl.window_should_close() {
         let mut draw_handle = rl.begin_drawing(&thread);
-        game.handle_input(&mut draw_handle);
-        game.handle_physics();
-        game.draw(&mut draw_handle);
+        match game.curr_screen {
+            Screen::Menu => {
+                game.show_menu(&mut draw_handle);
+            }
+            Screen::Game => {
+                game.handle_input(&mut draw_handle);
+                game.handle_physics();
+                game.draw(&mut draw_handle);
+            }
+        }
     }
 }
