@@ -114,7 +114,7 @@ int main() {
 
   std::cout << randomX << " " << randomY;
   ball = {6.0f, {(float)w_Width / 2, (float)w_Height / 2}, {randomX, randomY}};
-  p1 = {{0.0f, 0.0f, 10, 9 * 10}, 0};
+  p1 = {{0.0f, 0.0f, 12, 108}, 0};
   p2 = {{w_Width - p1.rec.width, w_Height - p1.rec.height, p1.rec.width,
          p1.rec.height},
         p1.score};
