@@ -20,13 +20,13 @@ struct Player {
 
 std::random_device rd;
 std::mt19937 gen(rd());
-std::uniform_real_distribution<> dis(5.0, 7.0);
+std::uniform_real_distribution<> dis(1.0, 3.0);
 float randomX = dis(gen);
 float randomY = dis(gen);
 
 float w_Width = 1280;
 float w_Height = 720;
-const float moveSpeed = w_Height * 0.01;
+const float moveSpeed = w_Height * 0.005;
 
 Ball ball;
 Player p1, p2;
@@ -129,7 +129,7 @@ void HandlePhysics() {
 }
 
 int main() {
-  SetTargetFPS(60);
+  SetTargetFPS(240);
   InitWindow(w_Width, w_Height, "pong");
   SetWindowState(FLAG_WINDOW_RESIZABLE);
   // SetWindowState(FLAG_BORDERLESS_WINDOWED_MODE);
@@ -139,7 +139,7 @@ int main() {
   w_Height = GetScreenHeight();
 
   ball = {{(float)w_Width / 2, (float)w_Height / 2}, {randomX, randomY}};
-  p1 = {{0.0f, 0.0f, 12, 108}};
+  p1 = {{0.0f, 0.0f, 16, 130}};
   p2 = {{w_Width - p1.rec.width, w_Height - p1.rec.height, p1.rec.width,
          p1.rec.height}};
   scoreUI = std::to_string(p1.score) + " - " + std::to_string(p2.score);
