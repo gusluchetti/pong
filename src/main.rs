@@ -161,7 +161,7 @@ fn main() {
 
     let (mut rl, thread) = raylib::init()
         .size(w_width, w_height)
-        .title("Hello, World")
+        .title("Pong - Raylib.rs")
         .build();
     rl.set_target_fps(240);
 
