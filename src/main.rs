@@ -74,7 +74,6 @@ impl Game {
         }
     }
 
-    // Handle player input and movement
     fn handle_input(&mut self, draw_handle: &mut RaylibDrawHandle) {
         let p1 = &mut self.players[0];
         if draw_handle.is_key_down(KeyboardKey::KEY_W) && !p1.hit_top {
@@ -93,12 +92,10 @@ impl Game {
         }
     }
 
-    // Update the physics (ball movement, collisions)
     fn handle_physics(&mut self) {
         self.ball.pos.y += self.ball.mov_vector.y;
         self.ball.pos.x += self.ball.mov_vector.x;
 
-        // Handle ball hitting top or bottom
         if self.ball.pos.y - self.ball.radius <= 0.0
             || self.ball.pos.y + self.ball.radius >= self.window_height as f32
         {
@@ -113,7 +110,6 @@ impl Game {
             self.ball.mov_vector.x = -self.ball.mov_vector.x;
         }
 
-        // Ball out of bounds logic (scoring)
         if self.ball.pos.x <= 0.0 {
             self.players[1].score += 1;
             self.reset_ball();
@@ -122,11 +118,9 @@ impl Game {
             self.reset_ball();
         }
 
-        // Update score UI string
         self.scoreboard = format!("{} - {}", self.players[0].score, self.players[1].score);
     }
 
-    // Reset the ball position after scoring
     fn reset_ball(&mut self) {
         self.ball.pos = Vector2 {
             x: self.window_width as f32 / 2.0,
@@ -139,7 +133,6 @@ impl Game {
         };
     }
 
-    // Draw the game objects
     fn draw(&mut self, draw_handle: &mut RaylibDrawHandle) {
         draw_handle.clear_background(Color::BLACK);
         draw_handle.draw_text(
