@@ -37,7 +37,7 @@ void DrawObjects() {
   std::cout << " | p2 (right) " << p2.rec.x << " " << p2.rec.y;
   ClearBackground(BLACK);
   DrawText(scoreUI.c_str(), w_Width / 2, 20, 30, WHITE);
-  DrawCircle(ball.pos.x, ball.pos.y, ball.radius, RED);
+  DrawCircle(ball.pos.x, ball.pos.y, ball.radius, GREEN);
   DrawRectangleRec(p1.rec, BLUE);
   DrawRectangleRec(p2.rec, RED);
 }
@@ -132,7 +132,8 @@ int main() {
   SetTargetFPS(60);
   InitWindow(w_Width, w_Height, "pong");
   SetWindowState(FLAG_WINDOW_RESIZABLE);
-  // SetWindowState(FLAG_WINDOW_MAXIMIZED);
+  // SetWindowState(FLAG_BORDERLESS_WINDOWED_MODE);
+  SetWindowState(FLAG_WINDOW_MAXIMIZED);
 
   w_Width = GetScreenWidth();
   w_Height = GetScreenHeight();
