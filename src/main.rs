@@ -1,4 +1,4 @@
-use rand::{random, random_range};
+use rand::random_range;
 use raylib::{
     ffi::{CheckCollisionCircleRec, Rectangle, Vector2},
     prelude::*,
