@@ -1,6 +1,7 @@
-*.out
-*.exe
 build/
 out/
-.vs
-.cache/clangd/index
+
+*.out
+*.exe
+out
+pong
